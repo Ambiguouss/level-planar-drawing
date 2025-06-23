@@ -7,10 +7,10 @@ using namespace std;
 
 int main(int argc, char *argv[]){
     Graph g = Graph::input_graph();
-    g.draw("res1.tex");
+    g.draw("res.tex");
     Sat_system s;
     s.create(g);
     cout<<s.solve()<<'\n';
     Graph g2=Planarer::planarize(g);
-    g2.draw("res1_planar.tex");
+    g2.draw("res_planar.tex");
 }
