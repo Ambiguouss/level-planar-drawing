@@ -12,5 +12,5 @@ int main(int argc, char *argv[]){
     s.create(g);
     cout<<s.solve()<<'\n';
     Graph g2=Planarer::planarize(g);
-    g2.draw("res1doubled.tex");
+    g2.draw("res1_planar.tex");
 }

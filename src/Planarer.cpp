@@ -102,9 +102,22 @@ struct Planarer{
             int j=x.size()-1;
             while(j>=0&&g.levels[l]->vertices[x[j]]->up_neighbors.size()==0)j--;
             if(i==x.size()) continue;
-            if(rev_perm[l-1][g.levels[l]->vertices[x[j]]->up_neighbors[0].lock()->index]<rev_perm[l-1][g.levels[l]->vertices[x[i]]->up_neighbors[0].lock()->index]){
+
+            auto i_up_neighbors = g.levels[l]->vertices[x[i]]->up_neighbors; 
+            auto j_up_neighbors = g.levels[l]->vertices[x[j]]->up_neighbors; 
+            int up_i = i_up_neighbors[0].lock()->index;
+            int up_j = j_up_neighbors[0].lock()->index;
+
+            if (rev_perm[l - 1][up_j] < rev_perm[l - 1][up_i]) {
                 reverse(permutations[l].begin(),permutations[l].end());
+            }else if(rev_perm[l - 1][up_j] == rev_perm[l - 1][up_i]){
+                if(j_up_neighbors.size()>1 && rev_perm[l-1][j_up_neighbors[1].lock()->index] <rev_perm[l - 1][up_i]){
+                    reverse(permutations[l].begin(),permutations[l].end());
+                }
             }
+
+            
+
             rev_perm.push_back(vector<int>(permutations[l].size()));
             for(int i=0;i<permutations[l].size();i++){
                 rev_perm[l][permutations[l][i]]=i;
@@ -120,8 +133,8 @@ struct Planarer{
         for(int l=0;l<res.levels.size()-1;l++){
             for(int i=0;i<res.levels[l]->vertices.size();i++){
                 for(auto x:g.levels[l]->vertices[permutations[l][i]]->down_neighbors){
-                    int lol = rev_perm[l+1][x.lock()->index];
-                    res.add_edge(l,i,lol);
+                    int mapped_index = rev_perm[l+1][x.lock()->index];
+                    res.add_edge(l,i,mapped_index);
                 }
             }
         }
